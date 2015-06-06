@@ -4971,7 +4971,9 @@ Runner.prototype.runTest = function(fn){
     test.on('error', function(err){
       self.fail(test, err);
     });
+    console.log('running test ' + test.title);
     test.run(fn);
+    console.log('after run');
   } catch (err) {
     fn(err);
   }

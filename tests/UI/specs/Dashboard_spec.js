@@ -145,16 +145,23 @@ describe("Dashboard", function () {
     });
 
     it("should rename dashboard when dashboard rename process completed", function (done) {
+        console.log('in test 1');
         expect.screenshot("rename").to.be.capture(function (page) {
+            console.log('in test 2');
             page.click('.dashboard-manager');
+            console.log('in test 3');
             page.click('li[data-action=renameDashboard]');
+            console.log('in test 4');
             page.evaluate(function () {
                 $('#newDashboardName').val('');
             });
+            console.log('in test 5');
             page.sendKeys('#newDashboardName', 'newname');
+            console.log('in test 6');
 
             // sending a mouse event doesn't seem to work...
             page.click('.ui-dialog[aria-describedby=renameDashboardConfirm] button>span:contains(Save)');
+            console.log('in test 7');
         }, done);
     });
 
