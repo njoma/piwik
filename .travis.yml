@@ -21,15 +21,15 @@ services:
 env:
   matrix:
     # PDO Mysql
-    - TEST_SUITE=SystemTests MYSQL_ADAPTER=PDO_MYSQL
-    - TEST_SUITE=IntegrationTests MYSQL_ADAPTER=PDO_MYSQL
-    - TEST_SUITE=UnitTests MYSQL_ADAPTER=PDO_MYSQL
+    #- TEST_SUITE=SystemTests MYSQL_ADAPTER=PDO_MYSQL
+    #- TEST_SUITE=IntegrationTests MYSQL_ADAPTER=PDO_MYSQL
+    #- TEST_SUITE=UnitTests MYSQL_ADAPTER=PDO_MYSQL
     # Javascript tests
-    - TEST_SUITE=JavascriptTests MYSQL_ADAPTER=PDO_MYSQL SKIP_COMPOSER_INSTALL=1
-    - TEST_SUITE=AngularJSTests MYSQL_ADAPTER=PDO_MYSQL SKIP_COMPOSER_INSTALL=1
+    #- TEST_SUITE=JavascriptTests MYSQL_ADAPTER=PDO_MYSQL SKIP_COMPOSER_INSTALL=1
+    #- TEST_SUITE=AngularJSTests MYSQL_ADAPTER=PDO_MYSQL SKIP_COMPOSER_INSTALL=1
     # All tests after another
-    - TEST_SUITE=AllTests MYSQL_ADAPTER=PDO_MYSQL
-    - TEST_SUITE=AllTests MYSQL_ADAPTER=MYSQLI
+    #- TEST_SUITE=AllTests MYSQL_ADAPTER=PDO_MYSQL
+    #- TEST_SUITE=AllTests MYSQL_ADAPTER=MYSQLI
     - TEST_SUITE=UITests MYSQL_ADAPTER=PDO_MYSQL
   global:
     - PIWIK_ROOT_DIR=$TRAVIS_BUILD_DIR
@@ -137,11 +137,17 @@ before_script:
   - ./tests/travis/setup_webserver.sh
 
   - export GENERATE_TRAVIS_YML_COMMAND="php ./console generate:travis-yml --core --verbose"
-  - ./tests/travis/autoupdate_travis_yml.sh
+  #- ./tests/travis/autoupdate_travis_yml.sh
 
   - cd tests/PHPUnit
 
 after_script:
+  - ls $PIWIK_ROOT_DIR
+  - ls $PIWIK_ROOT_DIR/tests/PHPUnit
+  - ls $PIWIK_ROOT_DIR/tests/lib/screenshot-testing
+  - ls /var/log
+  - cat /var/log/kern.log
+
   # change directory back to root travis dir
   - cd $PIWIK_ROOT_DIR
 
