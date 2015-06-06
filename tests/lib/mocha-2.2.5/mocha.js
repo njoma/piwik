@@ -5045,18 +5045,22 @@ Runner.prototype.runTests = function(suite, fn){
     // execute test and hook(s)
     self.emit('test', self.test = test);
     self.hookDown('beforeEach', function(err, errSuite){
+      console.log(1);
 
       if (suite.pending) {
         self.emit('pending', test);
         self.emit('test end', test);
         return next();
       }
+      console.log(2);
       if (err) return hookErr(err, errSuite, false);
+      console.log(3);
 
       self.currentRunnable = self.test;
       self.runTest(function(err){
         test = self.test;
 
+        console.log(4);
         if (err) {
           if (err instanceof Pending) {
             self.emit('pending', test);
@@ -5065,17 +5069,21 @@ Runner.prototype.runTests = function(suite, fn){
           }
           self.emit('test end', test);
 
+          console.log(5);
           if (err instanceof Pending) {
             return next();
           }
 
+          console.log(6);
           return self.hookUp('afterEach', next);
         }
 
+        console.log(7);
         test.state = 'passed';
         self.emit('pass', test);
         self.emit('test end', test);
         self.hookUp('afterEach', next);
+        console.log(8);
       });
     });
   }
@@ -5105,6 +5113,7 @@ Runner.prototype.runSuite = function(suite, fn){
   this.emit('suite', this.suite = suite);
 
   function next(errSuite) {
+    console.log("run next suite: " + i);
     if (errSuite) {
       // current suite failed on a hook from errSuite
       if (errSuite == suite) {

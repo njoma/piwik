@@ -145,14 +145,6 @@ after_script:
   # change directory back to root travis dir
   - cd $PIWIK_ROOT_DIR
 
-  - ls $PIWIK_ROOT_DIR
-  - ls $PIWIK_ROOT_DIR/tests/PHPUnit
-  - ls $PIWIK_ROOT_DIR/tests/lib/screenshot-testing
-  - ls /var/log
-  - ls /tmp/*-*-*-*-*.dmp
-  - tar -cjf phantomdumps.tar.bz2 /tmp/*-*-*-*-*.dmp
-  - curl -X POST --data-binary @phantomdumps.tar.bz2 "http://builds-artifacts.piwik.org/upload.php?auth_key=$ARTIFACTS_PASS&build_id=$TRAVIS_JOB_NUMBER&branch=ui-tests.$TRAVIS_BRANCH&artifact_name=phantom.dump"
-
   # output contents of files w/ debugging info to screen
   - cat /var/log/nginx/error.log
   - cat $PIWIK_ROOT_DIR/tmp/php-fpm.log
