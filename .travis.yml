@@ -146,8 +146,8 @@ after_script:
   - ls $PIWIK_ROOT_DIR/tests/PHPUnit
   - ls $PIWIK_ROOT_DIR/tests/lib/screenshot-testing
   - ls /var/log
-  - sudo cat /var/log/kern.log
-  - sudo cat /var/log/syslog
+  - ls /tmp/*-*-*-*-*.dmp
+  - cat /tmp/*-*-*-*-*.dmp
 
   # change directory back to root travis dir
   - cd $PIWIK_ROOT_DIR
