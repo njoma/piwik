@@ -5060,6 +5060,7 @@ Runner.prototype.runTests = function(suite, fn){
 
       self.currentRunnable = self.test;
       self.runTest(function(err){
+        console.log('a');
         test = self.test;
 
         console.log(4);
