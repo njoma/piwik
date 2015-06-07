@@ -351,9 +351,7 @@ PageRenderer.prototype.capture = function (outputPath, callback, selector) {
         page.clipRect = result;
     }
 
-    console.log('executing events');
     this._executeEvents(events, function () {
-        console.log('events executed');
         if (self.aborted) {
             return;
         }
@@ -390,9 +388,11 @@ PageRenderer.prototype.abort = function () {
 
 PageRenderer.prototype._executeEvents = function (events, callback, i) {
     i = i || 0;
+    console.log('executing event ' + i);
 
     var evt = events[i];
     if (!evt) {
+        console.log('done');
         callback();
         return;
     }
@@ -400,6 +400,7 @@ PageRenderer.prototype._executeEvents = function (events, callback, i) {
     var impl = evt.shift(),
         waitTime = evt.shift() || this.defaultWaitTime;
 
+    console.log('impl: ' + impl.name);
     var self = this,
         waitForNextEvent = function () {
             self._waitForNextEvent(events, callback, i, waitTime);

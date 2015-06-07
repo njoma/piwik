@@ -155,7 +155,6 @@ describe("Dashboard", function () {
 
             // sending a mouse event doesn't seem to work...
             page.click('.ui-dialog[aria-describedby=renameDashboardConfirm] button>span:contains(Save)');
-            console.log('done w/ page setup');
         }, done);
     });
 
