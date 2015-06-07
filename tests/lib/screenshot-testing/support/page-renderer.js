@@ -400,9 +400,10 @@ PageRenderer.prototype._executeEvents = function (events, callback, i) {
     var impl = evt.shift(),
         waitTime = evt.shift() || this.defaultWaitTime;
 
-    console.log('impl: ' + impl.name);
+    console.log('impl: ' + impl.toString());
     var self = this,
         waitForNextEvent = function () {
+            console.log('waiting');
             self._waitForNextEvent(events, callback, i, waitTime);
         };
 
