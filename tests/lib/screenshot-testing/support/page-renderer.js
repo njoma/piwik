@@ -127,19 +127,27 @@ PageRenderer.prototype._sendMouseEvent = function (type, pos, callback) {
 };
 
 PageRenderer.prototype._click = function (selector, modifiers, callback) {
+    console.log('click ' + selector);
+    console.log(JSON.stringify(modifiers));
     var position = this._getPosition(selector);
 
+    console.log('click 1');
     if (modifiers.length) {
+        console.log('click 2');
         var self = this;
         modifiers = modifiers.reduce(function (previous, mStr) {
             return self.webpage.event.modifier[mStr] | previous;
         }, 0);
 
+        console.log('click 3');
         this.webpage.sendEvent('mousedown', position.x, position.y, 'left', modifiers);
+        console.log('click 4');
         this.webpage.sendEvent('mouseup', position.x, position.y, 'left', modifiers);
     } else {
+        console.log('click 5');
         this.webpage.sendEvent('click', position.x, position.y);
     }
+    console.log('click 6');
 
     callback();
 };
@@ -400,7 +408,6 @@ PageRenderer.prototype._executeEvents = function (events, callback, i) {
     var impl = evt.shift(),
         waitTime = evt.shift() || this.defaultWaitTime;
 
-    console.log('impl: ' + impl.toString());
     var self = this,
         waitForNextEvent = function () {
             console.log('waiting');
@@ -411,6 +418,7 @@ PageRenderer.prototype._executeEvents = function (events, callback, i) {
 
     try {
         impl.apply(this, evt);
+        console.log('done');
     } catch (err) {
         self.pageLogs.push("Error: " + err.stack);
         waitForNextEvent();
