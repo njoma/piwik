@@ -131,23 +131,18 @@ PageRenderer.prototype._click = function (selector, modifiers, callback) {
     console.log(JSON.stringify(modifiers));
     var position = this._getPosition(selector);
 
-    console.log('click 1');
     if (modifiers.length) {
-        console.log('click 2');
         var self = this;
         modifiers = modifiers.reduce(function (previous, mStr) {
             return self.webpage.event.modifier[mStr] | previous;
         }, 0);
 
-        console.log('click 3');
         this.webpage.sendEvent('mousedown', position.x, position.y, 'left', modifiers);
-        console.log('click 4');
         this.webpage.sendEvent('mouseup', position.x, position.y, 'left', modifiers);
     } else {
-        console.log('click 5');
+        console.log('click to ' + position.x + ', ' + position.y);
         this.webpage.sendEvent('click', position.x, position.y);
     }
-    console.log('click 6');
 
     callback();
 };
