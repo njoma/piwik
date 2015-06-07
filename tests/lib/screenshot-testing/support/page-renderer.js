@@ -351,7 +351,9 @@ PageRenderer.prototype.capture = function (outputPath, callback, selector) {
         page.clipRect = result;
     }
 
+    console.log('executing events');
     this._executeEvents(events, function () {
+        console.log('events executed');
         if (self.aborted) {
             return;
         }
@@ -506,6 +508,7 @@ PageRenderer.prototype._setCorrectViewportSize = function () {
 PageRenderer.prototype._setupWebpageEvents = function () {
     var self = this;
     this.webpage.onError = function (message, trace) {
+        console.log('error: ');
         var msgStack = ['Webpage error: ' + message];
         if (trace && trace.length) {
             msgStack.push('trace:');
@@ -513,6 +516,7 @@ PageRenderer.prototype._setupWebpageEvents = function () {
                 msgStack.push(' -> ' + t.file + ': ' + t.line + (t.function ? ' (in function "' + t.function + '")' : ''));
             });
         }
+        console.log(msgStack.join('\n'));
 
         self.pageLogs.push(msgStack.join('\n'));
     };
@@ -532,10 +536,12 @@ PageRenderer.prototype._setupWebpageEvents = function () {
     };
 
     this.webpage.onConsoleMessage = function (message) {
+        console.log('page message: ' + message);
         self.pageLogs.push('Log: ' + message);
     };
 
     this.webpage.onAlert = function (message) {
+        console.log('page alert: ' + message);
         self.pageLogs.push('Alert: ' + message);
     };
 

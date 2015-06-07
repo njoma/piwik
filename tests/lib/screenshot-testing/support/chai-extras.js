@@ -84,7 +84,6 @@ function capture(screenName, compareAgainst, selector, pageSetupFn, comparisonTh
 
     try {
         pageRenderer.capture(processedScreenshotPath, function (err) {
-            console.log('captured');
             if (err) {
                 var indent = "     ";
                 err.stack = err.message + "\n" + indent + getPageLogsString(pageRenderer.pageLogs, indent);
