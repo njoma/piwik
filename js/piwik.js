@@ -2285,6 +2285,7 @@ if (typeof Piwik !== 'object') {
                 // Guard against installing the link tracker more than once per Tracker instance
                 linkTrackingInstalled = false,
                 linkTrackingEnabled = false,
+                defaultTreatRightClickLikeLeftClick = false,
 
                 // Guard against installing the activity tracker more than once per Tracker instance
                 activityTrackingInstalled = false,
@@ -3897,26 +3898,35 @@ if (typeof Piwik !== 'object') {
                         processClick(target);
                     }
                     lastButton = lastTarget = null;
+                } else if (evt.type === 'contextmenu') {
+                    if (target) {
+                        processClick(target);
+                    }
                 }
             }
 
             /*
              * Add click listener to a DOM element
              */
-            function addClickListener(element, enable) {
+            function addClickListener(element, enable, treatRightClickLikeLeftClick) {
                 if (enable) {
                     // for simplicity and performance, we ignore drag events
                     addEventListener(element, 'mouseup', clickHandler, false);
                     addEventListener(element, 'mousedown', clickHandler, false);
                 } else {
                     addEventListener(element, 'click', clickHandler, false);
+
+                    if (treatRightClickLikeLeftClick) {
+                        addEventListener(element, 'contextmenu', clickHandler, false);
+                    }
+
                 }
             }
 
             /*
              * Add click handlers to anchor and AREA elements, except those to be ignored
              */
-            function addClickListeners(enable) {
+            function addClickListeners(enable, treatRightClickLikeLeftClick) {
                 if (!linkTrackingInstalled) {
                     linkTrackingInstalled = true;
 
@@ -3929,7 +3939,7 @@ if (typeof Piwik !== 'object') {
                     if (linkElements) {
                         for (i = 0; i < linkElements.length; i++) {
                             if (!ignorePattern.test(linkElements[i].className)) {
-                                addClickListener(linkElements[i], enable);
+                                addClickListener(linkElements[i], enable, treatRightClickLikeLeftClick);
                             }
                         }
                     }
@@ -4768,9 +4778,18 @@ if (typeof Piwik !== 'object') {
                  *
                  * @param DOMElement element
                  * @param bool enable If true, use pseudo click-handler (mousedown+mouseup)
+                 * @param bool treatRightClickLikeLeftClick If "true", a right click on a link will be tracked as
+                 *                                          clicked even if "Open in new tab" is not selected. If
+                 *                                          "false" (default), nothing will be tracked on right click.
+                 *                                          A right click is usually done to open a link / download in
+                 *                                          a new tab therefore you might want to enable it.
                  */
-                addListener: function (element, enable) {
-                    addClickListener(element, enable);
+                addListener: function (element, enable, treatRightClickLikeLeftClick) {
+                    if ('undefined' === (typeof treatRightClickLikeLeftClick)) {
+                        treatRightClickLikeLeftClick = defaultTreatRightClickLikeLeftClick;
+                    }
+
+                    addClickListener(element, enable, treatRightClickLikeLeftClick);
                 },
 
                 /**
@@ -4789,17 +4808,26 @@ if (typeof Piwik !== 'object') {
                  * @see https://bugs.webkit.org/show_bug.cgi?id=54783
                  *
                  * @param bool enable If true, use pseudo click-handler (mousedown+mouseup)
+                 * @param bool treatRightClickLikeLeftClick If "true", a right click on a link will be tracked as
+                 *                                          clicked even if "Open in new tab" is not selected. If
+                 *                                          "false" (default), nothing will be tracked on right click.
+                 *                                          A right click is usually done to open a link / download in
+                 *                                          a new tab therefore you might want to enable it.
                  */
-                enableLinkTracking: function (enable) {
+                enableLinkTracking: function (enable, treatRightClickLikeLeftClick) {
                     linkTrackingEnabled = true;
+
+                    if ('undefined' === (typeof treatRightClickLikeLeftClick)) {
+                        treatRightClickLikeLeftClick = defaultTreatRightClickLikeLeftClick;
+                    }
 
                     if (hasLoaded) {
                         // the load event has already fired, add the click listeners now
-                        addClickListeners(enable);
+                        addClickListeners(enable, treatRightClickLikeLeftClick);
                     } else {
                         // defer until page has loaded
                         registeredOnLoadHandlers.push(function () {
-                            addClickListeners(enable);
+                            addClickListeners(enable, treatRightClickLikeLeftClick);
                         });
                     }
                 },
